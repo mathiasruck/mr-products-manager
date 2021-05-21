@@ -1,5 +1,7 @@
 package com.mathiasruck.mrproductsmanager.builder;
 
+import java.util.UUID;
+
 import com.mathiasruck.mrproductsmanager.model.Product;
 
 public class ProductBuilder {
@@ -18,6 +20,12 @@ public class ProductBuilder {
     public ProductBuilder withPrice(Double price) {
         product.setPrice(price);
         return this;
+
+    }
+
+    public ProductBuilder withRandonSku() {
+        product.setSku(UUID.randomUUID().toString());
+        return this;
     }
 
     public ProductBuilder withName(String name) {
@@ -25,4 +33,12 @@ public class ProductBuilder {
         return this;
     }
 
+    public ProductBuilder withId(Long id) {
+        product.setId(id);
+        return this;
+    }
+
+    public Product build() {
+        return product;
+    }
 }
