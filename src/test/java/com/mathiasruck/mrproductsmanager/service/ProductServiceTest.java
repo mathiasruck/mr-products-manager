@@ -6,15 +6,22 @@ import static java.util.stream.Stream.of;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -28,6 +35,9 @@ public class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void setup() {
@@ -51,6 +61,7 @@ public class ProductServiceTest {
 
         Mockito.when(productRepository.findAll()).thenReturn(of(apple, orange).collect(toList()));
         List<Product> prodList = productService.listAll();
+
         assertThat(prodList.size(), is(equalTo(2)));
     }
 
@@ -64,8 +75,8 @@ public class ProductServiceTest {
                 .build();
 
         when(productRepository.save(any(Product.class))).thenReturn(apple);
-
         Product prodCreated = productService.save(apple);
+
         assertThat(prodCreated.getId(), is(equalTo(apple.getId())));
         assertThat(prodCreated.getSku(), is(equalTo(apple.getSku())));
     }
@@ -81,10 +92,35 @@ public class ProductServiceTest {
 
         Product prodCreated = productService.save(apple);
         assertThat(prodCreated.getSku(), is(equalTo(apple.getSku())));
+        verify(productRepository, times(1)).save(apple);
     }
 
     @Test
-    public void deleteProductsSuccessfully() {
+    public void deleteProductSuccessfully() {
+        productService.delete(15L);
+
+        verify(productRepository, times(1)).deleteById(15L);
     }
 
+    @Test
+    public void getProductSuccessFully() {
+        Product eggfruit = getProduct()
+                .withId(10L)
+                .withName("Eggfruit")
+                .withPrice(1.5)
+                .withRandonSku()
+                .build();
+        when(productRepository.findById(any())).thenReturn(Optional.of(eggfruit));
+        Product prod = productService.getById(10L);
+        assertThat(eggfruit.getId(), is(equalTo(prod.getId())));
+        assertThat(eggfruit.getSku(), is(equalTo(prod.getSku())));
+        verify(productRepository, times(1)).findById(any());
+
+    }
+
+    @Test
+    public void getUnexistentProduct() {
+        assertThrows(NoSuchElementException.class, () -> productService.getById(10L));
+
+    }
 }
