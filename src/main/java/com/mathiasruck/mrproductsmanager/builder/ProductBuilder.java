@@ -1,5 +1,6 @@
 package com.mathiasruck.mrproductsmanager.builder;
 
+import java.util.Date;
 import java.util.UUID;
 
 import com.mathiasruck.mrproductsmanager.model.Product;
@@ -25,6 +26,16 @@ public class ProductBuilder {
 
     public ProductBuilder withRandonSku() {
         product.setSku(UUID.randomUUID().toString());
+        return this;
+    }
+
+    public ProductBuilder withSku(String sku) {
+        product.setSku(sku);
+        return this;
+    }
+
+    public ProductBuilder withRandonCreationDate() {
+        product.setCreationDate(new Date());
         return this;
     }
 
