@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -63,6 +64,16 @@ public class ProductServiceTest {
         List<Product> prodList = productService.listAll();
 
         assertThat(prodList.size(), is(equalTo(2)));
+    }
+
+    @Test
+    public void listAllProductsReturnsZeroItems() {
+
+        Mockito.when(productRepository.findAll()).thenReturn(new ArrayList<>());
+        List<Product> prodList = productService.listAll();
+
+        assertThat(prodList.size(), is(equalTo(0)));
+        verify(productRepository, times(1)).findAll();
     }
 
     @Test
