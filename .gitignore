@@ -69,6 +69,8 @@ hs_err_pid*
 
 # dependencies
 /anodemodules
+/node
+/node_modules
 
 # profiling files
 chrome-profiler-events*.json
@@ -99,7 +101,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-
+*.un~
 # System Files
 .DS_Store
 Thumbs.db
