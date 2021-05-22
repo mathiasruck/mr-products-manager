@@ -24,7 +24,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import com.mathiasruck.mrproductsmanager.model.Product;
 import com.mathiasruck.mrproductsmanager.repository.ProductRepository;
@@ -60,7 +59,7 @@ public class ProductServiceTest {
                 .withRandonSku()
                 .build();
 
-        Mockito.when(productRepository.findAll()).thenReturn(of(apple, orange).collect(toList()));
+        when(productRepository.findAll()).thenReturn(of(apple, orange).collect(toList()));
         List<Product> prodList = productService.listAll();
 
         assertThat(prodList.size(), is(equalTo(2)));
@@ -69,7 +68,7 @@ public class ProductServiceTest {
     @Test
     public void listAllProductsReturnsZeroItems() {
 
-        Mockito.when(productRepository.findAll()).thenReturn(new ArrayList<>());
+        when(productRepository.findAll()).thenReturn(new ArrayList<>());
         List<Product> prodList = productService.listAll();
 
         assertThat(prodList.size(), is(equalTo(0)));
@@ -86,10 +85,9 @@ public class ProductServiceTest {
                 .build();
 
         when(productRepository.save(any(Product.class))).thenReturn(apple);
-        Product prodCreated = productService.save(apple);
+        productService.save(apple);
 
-        assertThat(prodCreated.getId(), is(equalTo(apple.getId())));
-        assertThat(prodCreated.getSku(), is(equalTo(apple.getSku())));
+        verify(productRepository, times(1)).save(apple);
     }
 
     @Test
@@ -98,11 +96,15 @@ public class ProductServiceTest {
                 .withName("Apple")
                 .withPrice(1.5)
                 .withRandonSku()
+                .withRandonCreationDate()
                 .build();
         when(productRepository.save(any(Product.class))).thenReturn(apple);
 
         Product prodCreated = productService.save(apple);
+        assertThat(prodCreated.getPrice(), is(equalTo(apple.getPrice())));
         assertThat(prodCreated.getSku(), is(equalTo(apple.getSku())));
+        assertThat(prodCreated.getName(), is(equalTo(apple.getName())));
+        assertThat(prodCreated.getCreationDate(), is(equalTo(apple.getCreationDate())));
         verify(productRepository, times(1)).save(apple);
     }
 
