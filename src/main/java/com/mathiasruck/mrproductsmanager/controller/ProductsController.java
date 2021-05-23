@@ -14,38 +14,38 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mathiasruck.mrproductsmanager.ProductDto;
 import com.mathiasruck.mrproductsmanager.model.Product;
-import com.mathiasruck.mrproductsmanager.service.ProductService;
+import com.mathiasruck.mrproductsmanager.service.ProductsService;
 
 @CrossOrigin()
 @RestController
-public class ProductController {
+public class ProductsController {
 
     @Autowired
-    private ProductService productService;
+    private ProductsService productsService;
 
-    @GetMapping("/v1/product")
+    @GetMapping("/v1/products")
     public List<Product> listAll() {
-        return productService.listAll();
+        return productsService.listAll();
     }
 
-    @GetMapping("/v1/product/{id}")
+    @GetMapping("/v1/products/{id}")
     public Product getById(@PathVariable("id") Long id) {
-        return productService.getById(id);
+        return productsService.getById(id);
     }
 
-    @DeleteMapping("/v1/product/{id}")
+    @DeleteMapping("/v1/products/{id}")
     public void deleteById(@PathVariable("id") Long id) {
-        productService.delete(id);
+        productsService.delete(id);
     }
 
-    @PostMapping("/v1/product")
+    @PostMapping("/v1/products")
     public Product create(@RequestBody ProductDto product) {
-        return productService.save(product.get());
+        return productsService.save(product.get());
     }
 
-    @PutMapping("/v1/product")
+    @PutMapping("/v1/products")
     public Product update(@RequestBody ProductDto product) {
-        return productService.save(product.get());
+        return productsService.save(product.get());
     }
 
 }

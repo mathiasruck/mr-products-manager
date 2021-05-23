@@ -24,21 +24,21 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import com.mathiasruck.mrproductsmanager.model.Product;
-import com.mathiasruck.mrproductsmanager.repository.ProductRepository;
+import com.mathiasruck.mrproductsmanager.repository.ProductsRepository;
 import com.mathiasruck.mrproductsmanager.service.impl.ProductServiceImpl;
 
-public class ProductServiceTest {
+public class ProductsServiceTest {
 
-    private ProductService productService;
+    private ProductsService productsService;
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductsRepository productsRepository;
 
     @Before
     public void setup() {
         openMocks(this);
-        productService = new ProductServiceImpl();
-        setField(productService, "productRepository", productRepository);
+        productsService = new ProductServiceImpl();
+        setField(productsService, "productsRepository", productsRepository);
     }
 
     @Test
@@ -54,8 +54,8 @@ public class ProductServiceTest {
                 .withRandonSku()
                 .build();
 
-        when(productRepository.findAll()).thenReturn(of(apple, orange).collect(toList()));
-        List<Product> prodList = productService.listAll();
+        when(productsRepository.findAll()).thenReturn(of(apple, orange).collect(toList()));
+        List<Product> prodList = productsService.listAll();
 
         assertThat(prodList.size(), is(equalTo(2)));
     }
@@ -63,11 +63,11 @@ public class ProductServiceTest {
     @Test
     public void listAllProductsReturnsZeroItems() {
 
-        when(productRepository.findAll()).thenReturn(new ArrayList<>());
-        List<Product> prodList = productService.listAll();
+        when(productsRepository.findAll()).thenReturn(new ArrayList<>());
+        List<Product> prodList = productsService.listAll();
 
         assertThat(prodList.size(), is(equalTo(0)));
-        verify(productRepository, times(1)).findAll();
+        verify(productsRepository, times(1)).findAll();
     }
 
     @Test
@@ -79,10 +79,10 @@ public class ProductServiceTest {
                 .withRandonSku()
                 .build();
 
-        when(productRepository.save(any(Product.class))).thenReturn(apple);
-        productService.save(apple);
+        when(productsRepository.save(any(Product.class))).thenReturn(apple);
+        productsService.save(apple);
 
-        verify(productRepository, times(1)).save(apple);
+        verify(productsRepository, times(1)).save(apple);
     }
 
     @Test
@@ -93,21 +93,21 @@ public class ProductServiceTest {
                 .withRandonSku()
                 .withRandonCreationDate()
                 .build();
-        when(productRepository.save(any(Product.class))).thenReturn(apple);
+        when(productsRepository.save(any(Product.class))).thenReturn(apple);
 
-        Product prodCreated = productService.save(apple);
+        Product prodCreated = productsService.save(apple);
         assertThat(prodCreated.getPrice(), is(equalTo(apple.getPrice())));
         assertThat(prodCreated.getSku(), is(equalTo(apple.getSku())));
         assertThat(prodCreated.getName(), is(equalTo(apple.getName())));
         assertThat(prodCreated.getCreationDate(), is(equalTo(apple.getCreationDate())));
-        verify(productRepository, times(1)).save(apple);
+        verify(productsRepository, times(1)).save(apple);
     }
 
     @Test
     public void deleteProductSuccessfully() {
-        productService.delete(15L);
+        productsService.delete(15L);
 
-        verify(productRepository, times(1)).deleteById(15L);
+        verify(productsRepository, times(1)).deleteById(15L);
     }
 
     @Test
@@ -118,17 +118,17 @@ public class ProductServiceTest {
                 .withPrice(1.5)
                 .withRandonSku()
                 .build();
-        when(productRepository.findById(any())).thenReturn(Optional.of(eggfruit));
-        Product prod = productService.getById(10L);
+        when(productsRepository.findById(any())).thenReturn(Optional.of(eggfruit));
+        Product prod = productsService.getById(10L);
         assertThat(eggfruit.getId(), is(equalTo(prod.getId())));
         assertThat(eggfruit.getSku(), is(equalTo(prod.getSku())));
-        verify(productRepository, times(1)).findById(any());
+        verify(productsRepository, times(1)).findById(any());
 
     }
 
     @Test
-    public void getUnexistentProduct() {
-        assertThrows(NoSuchElementException.class, () -> productService.getById(10L));
+    public void getWithInvalidProductId() {
+        assertThrows(NoSuchElementException.class, () -> productsService.getById(10L));
 
     }
 }

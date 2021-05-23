@@ -27,18 +27,18 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mathiasruck.mrproductsmanager.model.Product;
-import com.mathiasruck.mrproductsmanager.service.ProductService;
+import com.mathiasruck.mrproductsmanager.service.ProductsService;
 
-@WebMvcTest(controllers = ProductController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
+@WebMvcTest(controllers = ProductsController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
 @ExtendWith(SpringExtension.class)
 @RunWith(SpringRunner.class)
-public class ProductControllerTest {
+public class ProductsControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductService service;
+    private ProductsService service;
 
     @Test
     public void listAllShouldReturnAllAvalilableProducts() throws Exception {
@@ -55,7 +55,7 @@ public class ProductControllerTest {
                 .withRandonSku()
                 .build();
         when(service.listAll()).thenReturn(of(apple, orange).collect(toList()));
-        this.mockMvc.perform(get("/v1/product"))
+        this.mockMvc.perform(get("/v1/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id").value(1L))
                 .andExpect(jsonPath("$.[0].name").value("Apple"))
@@ -76,7 +76,7 @@ public class ProductControllerTest {
                 .withRandonSku()
                 .build();
         when(service.getById(any(Long.class))).thenReturn(orange);
-        this.mockMvc.perform(get("/v1/product/2"))
+        this.mockMvc.perform(get("/v1/products/2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(2L))
                 .andExpect(jsonPath("$.name").value("Orange"))
@@ -101,7 +101,7 @@ public class ProductControllerTest {
 
         String productJson = new ObjectMapper().writeValueAsString(orangeToSend);
         when(service.save(any(Product.class))).thenReturn(orangeSaved);
-        this.mockMvc.perform(post("/v1/product/")
+        this.mockMvc.perform(post("/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(productJson))
                 .andExpect(status().isOk())
@@ -113,7 +113,7 @@ public class ProductControllerTest {
 
     @Test
     public void deleteProductSuccessfully() throws Exception {
-        this.mockMvc.perform(delete("/v1/product/2"))
+        this.mockMvc.perform(delete("/v1/products/2"))
                 .andExpect(status().isOk());
     }
 
@@ -136,7 +136,7 @@ public class ProductControllerTest {
 
         String productJson = new ObjectMapper().writeValueAsString(orangeToSend);
         when(service.save(any(Product.class))).thenReturn(orangeSaved);
-        this.mockMvc.perform(put("/v1/product")
+        this.mockMvc.perform(put("/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(productJson)).andDo(print())
                 .andExpect(status().isOk())

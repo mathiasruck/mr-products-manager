@@ -7,35 +7,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mathiasruck.mrproductsmanager.model.Product;
-import com.mathiasruck.mrproductsmanager.repository.ProductRepository;
-import com.mathiasruck.mrproductsmanager.service.ProductService;
+import com.mathiasruck.mrproductsmanager.repository.ProductsRepository;
+import com.mathiasruck.mrproductsmanager.service.ProductsService;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductsService {
     @Autowired
-    private ProductRepository productRepository;
+    private ProductsRepository productsRepository;
 
     @Override
     public List<Product> listAll() {
         List<Product> prodList = new ArrayList<>();
-        productRepository.findAll().forEach(prodList::add);
+        productsRepository.findAll().forEach(prodList::add);
         return prodList;
     }
 
     @Override
     public Product save(Product product) {
-        return productRepository.save(product);
+        return productsRepository.save(product);
     }
 
     @Override
     public void delete(Long id) {
-        productRepository.deleteById(id);
+        productsRepository.deleteById(id);
 
     }
 
     @Override
     public Product getById(Long id) {
-        return productRepository.findById(id).orElseThrow();
+        return productsRepository.findById(id).orElseThrow();
     }
 
 }

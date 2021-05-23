@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mathiasruck.mrproductsmanager.model.Product;
 
-public interface ProductService {
+public interface ProductsService {
 
     public List<Product> listAll();
 
