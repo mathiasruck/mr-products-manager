@@ -16,7 +16,7 @@ import com.mathiasruck.mrproductsmanager.ProductDto;
 import com.mathiasruck.mrproductsmanager.model.Product;
 import com.mathiasruck.mrproductsmanager.service.ProductsService;
 
-@CrossOrigin()
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class ProductsController {
 
