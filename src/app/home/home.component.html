@@ -3,18 +3,20 @@
 
     <mat-card *ngFor="let product of products" style="margin-top:11px;">
         <mat-card-header>
-            <mat-card-title>{{product.name}}</mat-card-title>
-            <mat-card-subtitle>{{product.price}} $/ {{product.quantity}}
-            </mat-card-subtitle>
+            <mat-card-title>ID: {{product.id}}</mat-card-title>
+            <mat-card-title>SKU: {{product.sku}}</mat-card-title>
+            <mat-card-title>Name: {{product.name}}</mat-card-title>
+            <mat-card-title>Price: € {{product.price}}</mat-card-title>
+            <mat-card-title>Creation date: {{product.creationDate | date:'yyyy/M/d, h:mm a'}}</mat-card-title>
         </mat-card-header>
-        <mat-card-content>
-            <p>
-                {{product.description}}
-            </p>
-            <img style="height:100%; width: 100%;" src="{{ product.imageUrl }}" />
-        </mat-card-content>
         <mat-card-actions>
-      <button mat-button> Buy product</button>
-    </mat-card-actions>
+            <button mat-button> Update Product</button>
+        </mat-card-actions>
     </mat-card>
+</div>
+<div>
+    <button (click)="firstPage()" mat-button> First</button>
+    <button (click)="previousPage()" mat-button> Previous</button>
+    <button (click)="nextPage()" mat-button> Next</button>
+    <button (click)="lastPage()" mat-button> Last</button>
 </div>
