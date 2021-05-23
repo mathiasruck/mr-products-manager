@@ -20,9 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 
 import com.mathiasruck.mrproductsmanager.model.Product;
@@ -35,9 +33,6 @@ public class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
-
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void setup() {
