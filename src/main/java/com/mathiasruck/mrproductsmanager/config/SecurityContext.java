@@ -9,10 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.mathiasruck.mrproductsmanager.config.filter.JwtRequestFilter;
 
@@ -26,16 +24,8 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    CorsConfigurationSource CorsConfiguration;
-
-    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override
@@ -47,9 +37,30 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().disable().csrf().disable()
-                .authorizeRequests().antMatchers("/v1/login").permitAll().anyRequest().authenticated()
-                .and().exceptionHandling().and().sessionManagement()
+                .authorizeRequests()
+                .antMatchers(getAllowedUrls())
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling()
+                .and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private String[] getAllowedUrls() {
+        return new String[] {
+                "/",
+                "/v1/login",
+                "/swagger-ui.css",
+                "/swagger-ui-bundle.js",
+                "/swagger-ui-standalone-preset.js",
+                "/webjars/**",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/csrf",
+                "/v2/api-docs" };
     }
 }

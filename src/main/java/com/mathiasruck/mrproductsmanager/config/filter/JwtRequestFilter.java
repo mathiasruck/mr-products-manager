@@ -42,11 +42,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
             if (jwtUtil.validateToken(jwt, userDetails)) {
-
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
@@ -58,7 +55,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (!"OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
         }
-
-        // chain.doFilter(request, response);
     }
 }

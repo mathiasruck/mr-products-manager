@@ -2,6 +2,7 @@ package com.mathiasruck.mrproductsmanager.util;
 
 import static com.mathiasruck.mrproductsmanager.enums.UserRole.ROLE_ADMIN;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtil {
 
+    public static final String TOKEN_PREFIX = "Bearer ";
     private static final String SECRET_KEY = "dRgUkXp2r5u8x/A?D(G+KbPeShVmYq3t6v9y$B&E)H@McQfTjWnZr4u7x!z%C*F-";
 
     public String extractUsername(String token) {
@@ -37,7 +39,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -50,24 +52,28 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(getExpiration())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     public static boolean checkRole(Collection<? extends GrantedAuthority> authorities, UserRole userRole) {
-
         for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().contains(ROLE_ADMIN.toString()))
                 return true;
         }
-
         return false;
     }
+
+    private Date getExpiration() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 12);
+        return calendar.getTime();
+    }
+
 }

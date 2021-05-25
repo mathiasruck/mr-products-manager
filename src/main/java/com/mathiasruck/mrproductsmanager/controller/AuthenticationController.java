@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mathiasruck.mrproductsmanager.model.AuthenticationRequest;
 import com.mathiasruck.mrproductsmanager.model.AuthenticationResponse;
-import com.mathiasruck.mrproductsmanager.model.MyUserDetails;
+import com.mathiasruck.mrproductsmanager.model.AuthenticationUserDetails;
 import com.mathiasruck.mrproductsmanager.util.JwtUtil;
 
 @RestController
@@ -43,7 +43,7 @@ public class AuthenticationController {
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
         // if authentication was succesful else throw an exception
-        final MyUserDetails userDetails = (MyUserDetails) userDetailsService
+        final AuthenticationUserDetails userDetails = (AuthenticationUserDetails) userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
         AuthenticationResponse response = new AuthenticationResponse(jwt);
