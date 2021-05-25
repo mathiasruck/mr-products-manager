@@ -5,12 +5,14 @@ import static com.mathiasruck.mrproductsmanager.builder.ProductBuilder.getProduc
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Iterables;
 import com.mathiasruck.mrproductsmanager.model.Product;
 import com.mathiasruck.mrproductsmanager.repository.ProductsRepository;
 
+@Profile("dev")
 @Component
 public class DataLoader implements ApplicationRunner {
 
