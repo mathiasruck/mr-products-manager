@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ProductManagerException.class)
+    @ExceptionHandler(MrProductManagerException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorResponse handleProductManagerException(ProductManagerException ex) {
+    public ErrorResponse handleMrProductManagerException(MrProductManagerException ex) {
         return new ErrorResponse(ex);
     }
 }

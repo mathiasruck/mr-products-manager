@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.mathiasruck.mrproductsmanager.exception.ProductManagerException;
+import com.mathiasruck.mrproductsmanager.exception.MrProductManagerException;
 import com.mathiasruck.mrproductsmanager.model.AuthenticationRequest;
 import com.mathiasruck.mrproductsmanager.model.AuthenticationResponse;
 import com.mathiasruck.mrproductsmanager.model.AuthenticationUserDetails;
@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             response.setRoles(roles);
             return response;
         } catch (Exception e) {
-            throw new ProductManagerException("user_not_found");
+            throw new MrProductManagerException("user_not_found");
         }
     }
 }

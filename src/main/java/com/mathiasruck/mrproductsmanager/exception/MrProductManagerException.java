@@ -1,16 +1,16 @@
 package com.mathiasruck.mrproductsmanager.exception;
 
-public class ProductManagerException extends RuntimeException {
+public class MrProductManagerException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
     private String message;
 
-    public ProductManagerException() {
+    public MrProductManagerException() {
         super();
     }
 
-    public ProductManagerException(String message) {
+    public MrProductManagerException(String message) {
         super();
         this.message = message;
     }

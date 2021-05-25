@@ -1,4 +1,4 @@
-package com.mathiasruck.mrproductsmanager;
+package com.mathiasruck.mrproductsmanager.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mathiasruck.mrproductsmanager.model.AuthenticationRequest;

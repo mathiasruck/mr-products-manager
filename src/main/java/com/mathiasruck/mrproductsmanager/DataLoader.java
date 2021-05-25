@@ -21,6 +21,7 @@ public class DataLoader implements ApplicationRunner {
         this.productsRepository = productsRepository;
     }
 
+    @Override
     public void run(ApplicationArguments args) {
         if (Iterables.size(productsRepository.findAll()) > 0) {
             return;
