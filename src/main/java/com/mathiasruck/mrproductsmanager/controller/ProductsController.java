@@ -3,7 +3,6 @@ package com.mathiasruck.mrproductsmanager.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +15,6 @@ import com.mathiasruck.mrproductsmanager.ProductDto;
 import com.mathiasruck.mrproductsmanager.model.Product;
 import com.mathiasruck.mrproductsmanager.service.ProductsService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class ProductsController {
 

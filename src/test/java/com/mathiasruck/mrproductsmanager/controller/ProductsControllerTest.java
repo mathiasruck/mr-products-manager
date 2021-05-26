@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,6 +20,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,6 +32,7 @@ import com.mathiasruck.mrproductsmanager.service.ProductsService;
 @WebMvcTest(controllers = ProductsController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
 @ExtendWith(SpringExtension.class)
 @RunWith(SpringRunner.class)
+@ActiveProfiles("test")
 public class ProductsControllerTest {
 
     @Autowired
@@ -138,12 +139,11 @@ public class ProductsControllerTest {
         when(service.save(any(Product.class))).thenReturn(orangeSaved);
         this.mockMvc.perform(put("/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(productJson)).andDo(print())
+                .content(productJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(5L))
                 .andExpect(jsonPath("$.name").value("Orange"))
                 .andExpect(jsonPath("$.sku").value(orangeToSend.getSku()))
                 .andExpect(jsonPath("$.price").value(1.25));
-        ;
     }
 }

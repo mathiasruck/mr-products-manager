@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoRecordFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MrProductManagerException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorResponse handleNoRecordFoundException(NoRecordFoundException ex) {
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("No Record Found");
-        return errorResponse;
+    public ErrorResponse handleMrProductManagerException(MrProductManagerException ex) {
+        return new ErrorResponse(ex);
     }
 }

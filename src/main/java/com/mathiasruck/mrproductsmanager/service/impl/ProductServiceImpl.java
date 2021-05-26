@@ -12,6 +12,7 @@ import com.mathiasruck.mrproductsmanager.service.ProductsService;
 
 @Service
 public class ProductServiceImpl implements ProductsService {
+
     @Autowired
     private ProductsRepository productsRepository;
 
