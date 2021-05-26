@@ -1,7 +1,5 @@
 package com.mathiasruck.mrproductsmanager.util;
 
-import static com.mathiasruck.mrproductsmanager.enums.UserRole.ROLE_ADMIN;
-
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -64,7 +62,7 @@ public class JwtUtil {
 
     public static boolean checkRole(Collection<? extends GrantedAuthority> authorities, UserRole userRole) {
         for (GrantedAuthority authority : authorities) {
-            if (authority.getAuthority().contains(ROLE_ADMIN.toString()))
+            if (authority.getAuthority().contains(userRole.toString()))
                 return true;
         }
         return false;

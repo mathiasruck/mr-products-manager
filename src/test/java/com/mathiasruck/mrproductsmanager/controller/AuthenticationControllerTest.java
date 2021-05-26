@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mathiasruck.mrproductsmanager.builder.AuthenticationRequestDtoBuilder;
 import com.mathiasruck.mrproductsmanager.dto.AuthenticationRequestDto;
+import com.mathiasruck.mrproductsmanager.exception.MrProductManagerException;
 import com.mathiasruck.mrproductsmanager.model.AuthenticationResponse;
 import com.mathiasruck.mrproductsmanager.service.AuthenticationService;
 
@@ -64,4 +65,21 @@ public class AuthenticationControllerTest {
                 .andExpect(jsonPath("$.roles.[0]").value("ROLE_ADMIN"));
     }
 
+    @Test
+    public void shouldNotAuthenteticate() throws Exception {
+        AuthenticationRequestDto dto = AuthenticationRequestDtoBuilder.getAuthenticationRequestDtoBuilder()
+                .withUsername("usernameError")
+                .withPassword("passwordError")
+                .build();
+
+        String dtoAsJson = new ObjectMapper().writeValueAsString(dto);
+        when(authenticationService.validateAuthentication(Mockito.any())).thenThrow(new MrProductManagerException("user_not_found"));
+
+        this.mockMvc.perform(post("/v1/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(dtoAsJson))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("user_not_found"));
+    }
 }
