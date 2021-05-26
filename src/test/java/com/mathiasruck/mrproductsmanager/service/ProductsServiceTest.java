@@ -6,12 +6,11 @@ import static java.util.stream.Stream.of;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class ProductsServiceTest {
 
     @Before
     public void setup() {
-        openMocks(this);
+        initMocks(this);
         productsService = new ProductServiceImpl();
         setField(productsService, "productsRepository", productsRepository);
     }
@@ -126,9 +125,9 @@ public class ProductsServiceTest {
 
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void getWithInvalidProductId() {
-        assertThrows(NoSuchElementException.class, () -> productsService.getById(10L));
+        productsService.getById(10L);
 
     }
 }
